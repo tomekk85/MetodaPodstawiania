@@ -47,11 +47,8 @@ public class Subsitution {
     }
 
     public Double getTimeInMicroseconds(){
-        Double time = 0.0;
-
         // zamienić nanosekundy na mikrosekundy
-        time = Double.valueOf(getTimeInNano()) / 1000.0;
-        return time;
+        return Double.valueOf(getTimeInNano()) / 1000.0;
     }
 
     public int getDimension() {

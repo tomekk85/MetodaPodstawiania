@@ -1,6 +1,6 @@
 package metodapodstawiania;
 
-import java.util.Arrays;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -29,14 +29,21 @@ public class Main {
             }
         }
 
+
+        TreeMap <Integer, Double> timeMeasurement = new TreeMap<>();
+
         for (int j = 0; j < 20; j++) {
             for (int i = 20; i <= 240; i += 20) {
                 Subsitution s = new Subsitution(i);
                 s.calculate();
-                System.out.println( i + "\t\t" + s.getTimeInNano());
+                timeMeasurement.put(i, s.getTimeInMicroseconds());
             }
         }
-
+        TreeMap <Integer, Double> sorted =new TreeMap<>();
+        sorted.putAll(timeMeasurement);
+        for(Map.Entry<Integer, Double> item:sorted.entrySet()){
+            System.out.println(item);
+        }
     }
 
     public static void printMatrix(double[][] matrix) {

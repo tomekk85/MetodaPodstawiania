@@ -37,8 +37,21 @@ public class Subsitution {
         return texstMatrix;
     }
 
-    public long getTimeInNano(){
+    private Long getTimeInNano(){
         return stop - start;
+    }
+    public void warmup(){
+        for(int i = 0; i < 10;i++){
+            calculate();
+        }
+    }
+
+    public Double getTimeInMicroseconds(){
+        Double time = 0.0;
+
+        // zamienić nanosekundy na mikrosekundy
+        time = Double.valueOf(getTimeInNano()) / 1000.0;
+        return time;
     }
 
     public int getDimension() {

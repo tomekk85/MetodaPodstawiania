@@ -4,8 +4,10 @@ public class Subsitution {
     private int dimension;
     private double[][] matrixA;
     private double[] vectorB;
+    private double[] vectorX;
     private  long start;
     private  long stop;
+    Object[][] matrixNestOne;
 
     public Subsitution(int dimension, double[][] matrixA, double[] vectorB) {
         this.dimension = dimension;
@@ -75,9 +77,22 @@ public class Subsitution {
         this.vectorB = vectorB;
     }
 
+    public double[] getVectorX() {
+        return vectorX;
+    }
+
+    public Object[][] getMatrixNestOne() {
+        return matrixNestOne;
+    }
+
     //petle obliczeniowe - implementacja algorytmu
     public double[] calculate(){
-        double[] vectorX = new double[dimension];
+        calculateVecorX();
+        return vectorX;
+    }
+
+    public void calculateVecorX(){
+        vectorX = new double[dimension];
         //start pomiaru czasu
         start = System.nanoTime();
 
@@ -89,9 +104,50 @@ public class Subsitution {
         }
         //koniec pomiaru czsu
         stop = System.nanoTime();
-
-        return vectorX;
     }
+
+
+    //pierwsze gniazdo
+
+
+    public void calculateNests(){
+        int numberOfElements = 0; // liczba elementów
+        for(int i = 1; i < dimension; i++){
+            numberOfElements += i;
+        }
+        matrixNestOne = new Object[numberOfElements][4];
+
+        vectorX = new double[dimension];
+
+        //pierwsze gniazdo
+        int iterator = 0;//zlicza ile razy była wykonana(w ogóle) operacja z wewnętrznej pętli
+
+        for(int i = 0; i < dimension; i++){
+            vectorX[i] = vectorB[i] / matrixA[i][i];
+
+            for(int j = i + 1; j < dimension; j++){
+                vectorB[j] = vectorB[j] - matrixA[j][i] * vectorX[i];
+                matrixNestOne[iterator][0] = i;
+                matrixNestOne[iterator][1] = j;
+                iterator++;
+            }
+        }
+        //koniec pomiaru czsau
+        stop = System.nanoTime();
+
+        //gniazdo 2
+        for(int i = 0; i < numberOfElements; i++){
+            matrixNestOne[i][2] = new PairOfVertices(matrixNestOne[i][0], matrixNestOne[i][1]);
+            matrixNestOne[i][3] = new PairOfVertices(matrixNestOne[i][1], matrixNestOne[i][0]);
+        }
+
+    }
+
+    public void calculateAllValues(){
+        calculateVecorX();
+        calculateNests();
+    }
+
 
 
 }

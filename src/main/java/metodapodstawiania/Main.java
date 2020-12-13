@@ -39,9 +39,8 @@ public class Main {
                 timeMeasurement.put(i, s.getTimeInMicroseconds());
             }
         }
-        TreeMap <Integer, Double> sorted =new TreeMap<>();
-        sorted.putAll(timeMeasurement);
-        for(Map.Entry<Integer, Double> item:sorted.entrySet()){
+
+        for(Map.Entry<Integer, Double> item:timeMeasurement.entrySet()){
             System.out.println(item);
         }
     }

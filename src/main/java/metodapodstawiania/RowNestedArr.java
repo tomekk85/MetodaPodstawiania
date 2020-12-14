@@ -42,7 +42,6 @@ public class RowNestedArr{
         this.ia2 = ia2;
         this.ia1 = ia1;
 
-
     }
     @Override
     public String toString(){

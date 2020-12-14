@@ -2,9 +2,9 @@ package metodapodstawiania;
 
 //klasa, która przechowuję parę wierzchołków
 public class PairOfVertices {
-    Object a;
-    Object b;
-    PairOfVertices(Object a, Object b){
+    int a;
+    int b;
+    PairOfVertices(int a, int b){
         this.a = a;
         this.b = b;
     }

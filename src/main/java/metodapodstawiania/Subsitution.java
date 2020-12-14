@@ -148,9 +148,6 @@ public class Subsitution {
                 }
             }
         }
-        //koniec pomiaru czsau
-        stop = System.nanoTime();
-
     }
 
     public void calculateAllValues(){

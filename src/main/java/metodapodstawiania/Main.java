@@ -1,12 +1,33 @@
 package metodapodstawiania;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) {
-        Subsitution s = new Subsitution(4);
+        Subsitution s = new Subsitution(3);
         s.calculateAllValues();
-        printMatrix(s.getMatrixNestOne());
+        //generowanie listy do gniazd pętli
+        ArrayList<RowNestedArr> list = s.getListNestOne();
+        for (Object item: list
+             ) {
+            System.out.println(item);
+        }
+
+        //sortowanie listy do gniazd pętli
+        ArrayList sortedList = list.stream()
+                .sorted(Comparator.comparing(RowNestedArr::getVerticeC).reversed())
+                .collect(Collectors
+                        .toCollection(ArrayList::new));
+
+        //wypisanie listy do gniazd pętli do konsoli
+        int index = 1;
+        for (Object item: sortedList
+        ) {
+            System.out.println(index + ". " + item);
+            index++;
+        }
 
         /*weryfikacja algorytmu
         double[][] matrix = {

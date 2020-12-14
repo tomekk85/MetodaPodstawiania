@@ -1,19 +1,24 @@
 package metodapodstawiania;
 
+import java.util.ArrayList;
+
 public class Subsitution {
     private int dimension;
-    private double[][] matrixA;
-    private double[] vectorB;
-    private double[] vectorX;
-    private  long start;
-    private  long stop;
-    Object[][] matrixNestOne;
+    private double[][] matrixA;//wejściowa macierz A
+    private double[] vectorB;//
+    private double[] vectorX;// wektor niewiadomych
+    private  long start;//przechowuje czas rozpoczęcia pomiaru czasu
+    private  long stop;//przechowuje czas zkończenia pomiaru czasu
+    ArrayList<RowNestedArr> listNestOne;
 
+    //konstruktor wykorzystywany przy weryfikacji algorytmu
     public Subsitution(int dimension, double[][] matrixA, double[] vectorB) {
         this.dimension = dimension;
         this.matrixA = matrixA;
         this.vectorB = vectorB;
     }
+
+    //konstruktor tworzy macierz trójkątną(pod główną przekątną same jedynki, na główną przekątną same zera)
     public Subsitution(int dimension){
         this.dimension = dimension;
         this.matrixA = generateTestMatrix();
@@ -81,8 +86,8 @@ public class Subsitution {
         return vectorX;
     }
 
-    public Object[][] getMatrixNestOne() {
-        return matrixNestOne;
+    public ArrayList<RowNestedArr> getListNestOne() {
+        return listNestOne;
     }
 
     //petle obliczeniowe - implementacja algorytmu
@@ -106,16 +111,16 @@ public class Subsitution {
         stop = System.nanoTime();
     }
 
-
-    //pierwsze gniazdo
-
-
+    /**
+     * Metoda wylicza elementy gniazd pętli i zapisuje je do tablicy
+     */
     public void calculateNests(){
         int numberOfElements = 0; // liczba elementów
         for(int i = 1; i < dimension; i++){
-            numberOfElements += i;
+            numberOfElements += i * i;
         }
-        matrixNestOne = new Object[numberOfElements][4];
+
+        listNestOne = new ArrayList<>();// lista przechowuje elementy zliczane z 1 i 2 gniazda pętli
 
         vectorX = new double[dimension];
 
@@ -127,19 +132,24 @@ public class Subsitution {
 
             for(int j = i + 1; j < dimension; j++){
                 vectorB[j] = vectorB[j] - matrixA[j][i] * vectorX[i];
-                matrixNestOne[iterator][0] = i;
-                matrixNestOne[iterator][1] = j;
-                iterator++;
+
+                for(int k = i + 1; k < dimension; k++) {
+                    int vertA = i + 1;
+                    int vertB = j + 1;
+                    int vertC = k + 1;
+
+                    listNestOne.add(
+                      new RowNestedArr(vertA,vertB,vertC,
+                              new PairOfVertices(vertB, vertA),
+                              new PairOfVertices(vertA, vertC),
+                              new PairOfVertices(vertB, vertC)
+                      )
+                    );
+                }
             }
         }
         //koniec pomiaru czsau
         stop = System.nanoTime();
-
-        //gniazdo 2
-        for(int i = 0; i < numberOfElements; i++){
-            matrixNestOne[i][2] = new PairOfVertices(matrixNestOne[i][0], matrixNestOne[i][1]);
-            matrixNestOne[i][3] = new PairOfVertices(matrixNestOne[i][1], matrixNestOne[i][0]);
-        }
 
     }
 

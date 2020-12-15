@@ -9,7 +9,8 @@ public class Subsitution {
     private double[] vectorX;// wektor niewiadomych
     private  long start;//przechowuje czas rozpoczęcia pomiaru czasu
     private  long stop;//przechowuje czas zkończenia pomiaru czasu
-    ArrayList<RowNestedArr> listNestOne;
+    ArrayList<RowNestedArr> listNestTwoModified;
+    ArrayList<RowNestedArr> listNestOneModified;
 
     //konstruktor wykorzystywany przy weryfikacji algorytmu
     public Subsitution(int dimension, double[][] matrixA, double[] vectorB) {
@@ -86,9 +87,11 @@ public class Subsitution {
         return vectorX;
     }
 
-    public ArrayList<RowNestedArr> getListNestOne() {
-        return listNestOne;
+    public ArrayList<RowNestedArr> getListNestTwoModified() {
+        return listNestTwoModified;
     }
+
+    public ArrayList<RowNestedArr> getListNestOneModified() {return listNestOneModified; }
 
     //petle obliczeniowe - implementacja algorytmu
     public double[] calculate(){
@@ -112,15 +115,12 @@ public class Subsitution {
     }
 
     /**
-     * Metoda wylicza elementy gniazd pętli i zapisuje je do tablicy
+     * Metoda wylicza elementy gniazd pętli i zapisuje je do tablicy przy zmodyfikowanym 2-gim gnieździe pętli
+     * (psiwykład2 - slajd4)
      */
-    public void calculateNests(){
-        int numberOfElements = 0; // liczba elementów
-        for(int i = 1; i < dimension; i++){
-            numberOfElements += i * i;
-        }
+    public void calculateWithSecondNestModified(){
 
-        listNestOne = new ArrayList<>();// lista przechowuje elementy zliczane z 1 i 2 gniazda pętli
+        listNestTwoModified = new ArrayList<>();// lista przechowuje elementy zliczane z 1 i 2 gniazda pętli
 
         vectorX = new double[dimension];
 
@@ -138,7 +138,7 @@ public class Subsitution {
                     int vertB = j + 1;
                     int vertC = k + 1;
 
-                    listNestOne.add(
+                    listNestTwoModified.add(
                       new RowNestedArr(vertA,vertB,vertC,
                               new PairOfVertices(vertB, vertA),
                               new PairOfVertices(vertA, vertC),
@@ -149,10 +149,51 @@ public class Subsitution {
             }
         }
     }
+    /**
+     * Metoda wylicza elementy gniazd pętli i zapisuje je do tablicy przy zmodyfikowanym 1-szym gnieździe pętli
+     * (psiwykład2 - slajd6)
+     */
+
+    public void calculateWithFirstNestModified(){
+        int numberOfElements = 0; // liczba elementów
+        for(int i = 1; i < dimension; i++){
+            numberOfElements += i * i;
+        }
+
+        listNestOneModified = new ArrayList<>();// lista przechowuje elementy zliczane z 1 i 2 gniazda pętli
+
+        vectorX = new double[dimension];
+
+        //pierwsze gniazdo
+        int iterator = 0;//zlicza ile razy była wykonana(w ogóle) operacja z wewnętrznej pętli
+
+        for(int i = 0; i < dimension; i++){
+            vectorX[i] = vectorB[i] / matrixA[i][i];
+
+            for(int j = i + 1; j < dimension; j++){
+                vectorB[j] = vectorB[j] - matrixA[j][i] * vectorX[i];
+
+                for(int k = i; k <= i; k++) {
+                    int vertA = i + 1;
+                    int vertB = j + 1;
+                    int vertC = k + 1;
+
+                    listNestOneModified.add(
+                            new RowNestedArr(vertA,vertB,vertC,
+                                    new PairOfVertices(vertB, vertA),
+                                    new PairOfVertices(vertA, vertC),
+                                    new PairOfVertices(vertB, vertC)
+                            )
+                    );
+                }
+            }
+        }
+    }
 
     public void calculateAllValues(){
         calculateVecorX();
-        calculateNests();
+        calculateWithSecondNestModified();
+        calculateWithFirstNestModified();
     }
 
 

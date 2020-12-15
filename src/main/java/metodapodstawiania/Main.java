@@ -1,31 +1,32 @@
 package metodapodstawiania;
 
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) {
-        Subsitution s = new Subsitution(3);
+
+
+        Subsitution s = new Subsitution(5);
         s.calculateAllValues();
-        //generowanie listy do gniazd pętli
-        ArrayList<RowNestedArr> list = s.getListNestOne();
-        for (Object item: list
-             ) {
-            System.out.println(item);
+        //generowanie listy dla zmodyfikowanej 2-giej gniazdy pętli
+        ArrayList<RowNestedArr> listMod2 = s.getListNestTwoModified();
+        //wydruk
+        int index = 1;
+        System.out.println("Tabela 1. Zmodyfikowane 2-gie gniazdo pętli");
+        for (Object item: listMod2) {
+            System.out.println(index +". " + item);
+            index++;
         }
 
-        //sortowanie listy do gniazd pętli
-        ArrayList sortedList = list.stream()
-                .sorted(Comparator.comparing(RowNestedArr::getVerticeC).reversed())
-                .collect(Collectors
-                        .toCollection(ArrayList::new));
+        System.out.println("");
 
-        //wypisanie listy do gniazd pętli do konsoli
-        int index = 1;
-        for (Object item: sortedList
-        ) {
-            System.out.println(index + ". " + item);
+        //generowanie listy dla zmodyfikowanej 1-szej gniazdy pętli
+        ArrayList<RowNestedArr> listMod1 = s.getListNestOneModified();
+        //wydruk
+        index = 1;
+        System.out.println("Tabela 2. Zmodyfikowane 1-sze gniazdo pętli");
+        for (Object item: listMod1) {
+            System.out.println(index +". " + item);
             index++;
         }
 

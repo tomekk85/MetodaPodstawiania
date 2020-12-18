@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        Subsitution s = new Subsitution(5);
+        Subsitution s = new Subsitution(7);
         s.calculateAllValues();
         //generowanie listy dla zmodyfikowanej 2-giej gniazdy pętli
         ArrayList<RowNestedArr> listMod2 = s.getListNestTwoModified();
@@ -20,11 +20,16 @@ public class Main {
         System.out.println("Tabela 2. Zmodyfikowane 1-sze gniazdo pętli");
         printList(listMod1);
 
+        //wydruk współrzędnych wierzchołków
+        System.out.println("Liczba wierzchołków: " + listMod2.size());
         for(RowNestedArr row: listMod2){
             System.out.print("[" + row.getCoordinateX() + ", " + row.getCoordinateY() + ", " + row.getCoordinateZ() + "], ");
         }
+
+        //wydruk połączeń między wierzchołkami
         System.out.println();
         ArrayList<Connection> connections = s.getListOfConnections();
+        System.out.println("Liczba połączen: " + connections.size());
         for (Connection con : connections) {
             System.out.print("[" + con.getFirstVerticeID()+", "+ con.getSecondVerticeID() + "], ");
         }

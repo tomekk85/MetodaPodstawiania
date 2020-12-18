@@ -3,15 +3,15 @@ package metodapodstawiania;
 import java.util.ArrayList;
 
 public class Subsitution {
-    private int dimension;
+    private int dimension;//wymiar macierzy
     private double[][] matrixA;//wejściowa macierz A
-    private double[] vectorB;//
+    private double[] vectorB;//wektor współczynników przy niewiadomych(?)
     private double[] vectorX;// wektor niewiadomych
     private long start;//przechowuje czas rozpoczęcia pomiaru czasu
     private long stop;//przechowuje czas zkończenia pomiaru czasu
-    private ArrayList<RowNestedArr> listNestTwoModified;
-    private ArrayList<RowNestedArr> listNestOneModified;
-    private ArrayList<Connection> listOfConnections;
+    private ArrayList<RowNestedArr> listNestTwoModified;// lista danych do tabeli - zmodyfikowano 2-gie gn. pętli
+    private ArrayList<RowNestedArr> listNestOneModified;// lista danych do tabeli - zmodyfikowano 1-sze gn. pętli
+    private ArrayList<Connection> listOfConnections;//lista połączeń między wierzchołkami
 
     //konstruktor wykorzystywany przy weryfikacji algorytmu
     public Subsitution(int dimension, double[][] matrixA, double[] vectorB) {
@@ -31,6 +31,7 @@ public class Subsitution {
         }
     }
 
+    //generowanie macierzy trójkątnej z jedynkami na głównej przekątnej i pod główną przekątną(nad główną przekątną same 0)
     public double[][] generateTestMatrix() {
         double[][] texstMatrix = new double[dimension][dimension];
         for (int i = 0; i < dimension; i++) {
@@ -123,7 +124,7 @@ public class Subsitution {
     }
 
     /**
-     * Metoda wylicza elementy gniazd pętli i zapisuje je do tablicy przy zmodyfikowanym 2-gim gnieździe pętli
+     * Metoda wylicza elementy tabeli i zapisuje je do tablicy przy zmodyfikowanym 2-gim gnieździe pętli
      * (psiwykład2 - slajd4)
      */
     public void calculateWithSecondNestModified() {
@@ -159,7 +160,7 @@ public class Subsitution {
     }
 
     /**
-     * Metoda wylicza elementy gniazd pętli i zapisuje je do tablicy przy zmodyfikowanym 1-szym gnieździe pętli
+     * Metoda wylicza elementy do tabeli i zapisuje je do tablicy przy zmodyfikowanym 1-szym gnieździe pętli
      * (psiwykład2 - slajd6)
      */
 
@@ -209,6 +210,10 @@ public class Subsitution {
         calculateListOfConnections();
     }
 
+    /**
+     * Metoda zwraca listę par ID(ID pobierane z obiektu klasy @RowNestedArr) wierzchołków, między którymi są połączenia
+     * oraz informację o kierunku(lewo, prawo, góra, skos)
+     */
     public void calculateListOfConnections() {
         listOfConnections = new ArrayList<Connection>();
 
@@ -219,20 +224,20 @@ public class Subsitution {
                     RowNestedArr rowB = listNestTwoModified.get(j);
                     //lewo
                     if (rowA.getCoordinateX() == rowA.getCoordinateX() && rowA.getIm().equals(rowB.getIm())) {
-                        listOfConnections.add(new Connection(rowA.getIndex(), rowB.getIndex(), "LEFT"));
+                        listOfConnections.add(new Connection(rowA.getID(), rowB.getID(), "LEFT"));
                     }//prawo
                     else if (rowA.getCoordinateX() == rowA.getCoordinateX() && rowA.getIa2().equals(rowB.getIa2())) {
-                        listOfConnections.add(new Connection(rowA.getIndex(), rowB.getIndex(), "RIGHT"));
+                        listOfConnections.add(new Connection(rowA.getID(), rowB.getID(), "RIGHT"));
                     }//góra
                     else if (rowA.getCoordinateY() == rowA.getCoordinateY() && rowA.getCoordinateZ() == rowA.getCoordinateZ()
                             && rowA.getIa1().equals(rowB.getIa1())) {
-                        listOfConnections.add(new Connection(rowA.getIndex(), rowB.getIndex(), "UP"));
+                        listOfConnections.add(new Connection(rowA.getID(), rowB.getID(), "UP"));
                     }//skos
                     if (rowA.getCoordinateZ() == rowB.getCoordinateZ() && rowA.getIa1().equals(rowB.getIa2())
                             && Math.abs(rowA.getCoordinateX() - rowB.getCoordinateX()) == 1
                             && Math.abs(rowA.getCoordinateY() - rowB.getCoordinateY()) == 1
                     ) {
-                        listOfConnections.add(new Connection(rowA.getIndex(), rowB.getIndex(), "CROSS"));
+                        listOfConnections.add(new Connection(rowA.getID(), rowB.getID(), "CROSS"));
                     }
                 }
             }

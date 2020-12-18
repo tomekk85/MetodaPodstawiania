@@ -2,7 +2,7 @@ package metodapodstawiania;
 
 //obiekt przechowujący elementy wiersza tabeli gniazd pętli 1 i 2
 public class RowNestedArr{
-    int index;
+    private int ID;
     private int coordinateX;//W1
     private int coordinateY;//W2
     private int coordinateZ;//W3
@@ -34,11 +34,11 @@ public class RowNestedArr{
         return ia1;
     }
 
-    public int getIndex() { return index;}
+    public int getID() { return ID;}
 
-    public RowNestedArr(int index, int coordinateX, int coordinateY, int coordinateZ,
+    public RowNestedArr(int ID, int coordinateX, int coordinateY, int coordinateZ,
                         PairOfCoordinates im, PairOfCoordinates ia2, PairOfCoordinates ia1) {
-        this.index = index;
+        this.ID = ID;
         this.coordinateX = coordinateX;
         this.coordinateY = coordinateY;
         this.coordinateZ = coordinateZ;
@@ -49,6 +49,6 @@ public class RowNestedArr{
     }
     @Override
     public String toString(){
-        return index + ". "+ coordinateX + " " + coordinateY + " " + coordinateZ + " " + im + " " + ia2 + " "  + ia1;
+        return ID + ". "+ coordinateX + " " + coordinateY + " " + coordinateZ + " " + im + " " + ia2 + " "  + ia1;
     }
 }

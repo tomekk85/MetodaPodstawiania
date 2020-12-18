@@ -2,42 +2,46 @@ package metodapodstawiania;
 
 //obiekt przechowujący elementy wiersza tabeli gniazd pętli 1 i 2
 public class RowNestedArr{
-    private int verticeA;//W1
-    private int verticeB;//W2
-    private int verticeC;//W3
-    private PairOfVertices im;//Im[nr]
-    private PairOfVertices ia2;//Ia2[nr]
-    private PairOfVertices ia1;//Ia1[nr]
+    int index;
+    private int coordinateX;//W1
+    private int coordinateY;//W2
+    private int coordinateZ;//W3
+    private PairOfCoordinates im;//Im[nr]
+    private PairOfCoordinates ia2;//Ia2[nr]
+    private PairOfCoordinates ia1;//Ia1[nr]
 
-    public int getVerticeA() {
-        return verticeA;
+    public int getCoordinateX() {
+        return coordinateX;
     }
 
-    public int getVerticeB() {
-        return verticeB;
+    public int getCoordinateY() {
+        return coordinateY;
     }
 
-    public int getVerticeC() {
-        return verticeC;
+    public int getCoordinateZ() {
+        return coordinateZ;
     }
 
-    public PairOfVertices getIm() {
+    public PairOfCoordinates getIm() {
         return im;
     }
 
-    public PairOfVertices getIa2() {
+    public PairOfCoordinates getIa2() {
         return ia2;
     }
 
-    public PairOfVertices getIa1() {
+    public PairOfCoordinates getIa1() {
         return ia1;
     }
 
-    public RowNestedArr(int verticeA, int verticeB, int verticeC,
-                        PairOfVertices im, PairOfVertices ia2, PairOfVertices ia1) {
-        this.verticeA = verticeA;
-        this.verticeB = verticeB;
-        this.verticeC = verticeC;
+    public int getIndex() { return index;}
+
+    public RowNestedArr(int index, int coordinateX, int coordinateY, int coordinateZ,
+                        PairOfCoordinates im, PairOfCoordinates ia2, PairOfCoordinates ia1) {
+        this.index = index;
+        this.coordinateX = coordinateX;
+        this.coordinateY = coordinateY;
+        this.coordinateZ = coordinateZ;
         this.im = im;
         this.ia2 = ia2;
         this.ia1 = ia1;
@@ -45,6 +49,6 @@ public class RowNestedArr{
     }
     @Override
     public String toString(){
-        return verticeA + " " + verticeB + " " + verticeC + " " + im + " " + ia2 + " "  + ia1;
+        return index + ". "+ coordinateX + " " + coordinateY + " " + coordinateZ + " " + im + " " + ia2 + " "  + ia1;
     }
 }

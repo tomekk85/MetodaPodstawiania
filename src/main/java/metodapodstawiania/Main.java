@@ -1,35 +1,32 @@
 package metodapodstawiania;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-
-        Subsitution s = new Subsitution(3);
+        Subsitution s = new Subsitution(5);
         s.calculateAllValues();
         //generowanie listy dla zmodyfikowanej 2-giej gniazdy pętli
         ArrayList<RowNestedArr> listMod2 = s.getListNestTwoModified();
         //wydruk
-        int index = 1;
         System.out.println("Tabela 1. Zmodyfikowane 2-gie gniazdo pętli");
-        for (RowNestedArr item: listMod2) {
-            System.out.println(index + ". " + item);
-            index++;
-        }
+        printList(listMod2);
 
         System.out.println("");
 
         //generowanie listy dla zmodyfikowanej 1-szej gniazdy pętli
         ArrayList<RowNestedArr> listMod1 = s.getListNestOneModified();
         //wydruk
-        index = 1;
         System.out.println("Tabela 2. Zmodyfikowane 1-sze gniazdo pętli");
-        for (Object item: listMod1) {
-            System.out.println(index +". " + item);
-            index++;
+        printList(listMod1);
+
+        for(RowNestedArr row: listMod2){
+            System.out.print("[" + row.getCoordinateX() + ", " + row.getCoordinateY() + ", " + row.getCoordinateZ() + "], ");
+        }
+        System.out.println();
+        ArrayList<Connection> connections = s.getListOfConnections();
+        for (Connection con : connections) {
+            System.out.print("[" + con.getFirstVerticeID()+", "+ con.getSecondVerticeID() + "], ");
         }
         /*
        //weryfikacja algorytmu
@@ -76,6 +73,8 @@ public class Main {
         for(Map.Entry<Integer, Double> item : timeMeasurement.entrySet()){
             System.out.println(item);
         }
+
+         */
     }
 
     public static void printMatrix(Object[][] matrix) {
@@ -85,7 +84,11 @@ public class Main {
             }
             System.out.println();
         }
-        */
+    }
 
+    public static void printList(ArrayList<RowNestedArr> list) {
+        for (Object item : list) {
+            System.out.println(item);
+        }
     }
 }

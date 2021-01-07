@@ -2,7 +2,7 @@ package metodapodstawiania;
 
 import java.util.ArrayList;
 
-public class Subsitution {
+public class Substitution {
     private int dimension;//wymiar macierzy
     private double[][] matrixA;//wejściowa macierz A
     private double[] vectorB;//wektor współczynników przy niewiadomych(?)
@@ -14,14 +14,14 @@ public class Subsitution {
     private ArrayList<Connection> listOfConnections;//lista połączeń między wierzchołkami
 
     //konstruktor wykorzystywany przy weryfikacji algorytmu
-    public Subsitution(int dimension, double[][] matrixA, double[] vectorB) {
+    public Substitution(int dimension, double[][] matrixA, double[] vectorB) {
         this.dimension = dimension;
         this.matrixA = matrixA;
         this.vectorB = vectorB;
     }
 
     //konstruktor tworzy macierz trójkątną(pod główną przekątną same jedynki, na główną przekątną same zera)
-    public Subsitution(int dimension) {
+    public Substitution(int dimension) {
         this.dimension = dimension;
         this.matrixA = generateTestMatrix();
         this.vectorB = new double[dimension];
@@ -223,14 +223,17 @@ public class Subsitution {
                     RowNestedArr rowA = listNestTwoModified.get(i);
                     RowNestedArr rowB = listNestTwoModified.get(j);
                     //lewo
-                    if (rowA.getCoordinateX() == rowA.getCoordinateX() && rowA.getIm().equals(rowB.getIm())) {
+                    if (rowA.getCoordinateX() == rowA.getCoordinateX() && rowA.getIm().equals(rowB.getIm())
+                    && rowA.getCoordinateZ() < rowB.getCoordinateZ()) {
                         listOfConnections.add(new Connection(rowA.getID(), rowB.getID(), "LEFT"));
                     }//prawo
-                    else if (rowA.getCoordinateX() == rowA.getCoordinateX() && rowA.getIa2().equals(rowB.getIa2())) {
+                    else if (rowA.getCoordinateX() == rowA.getCoordinateX() && rowA.getIa2().equals(rowB.getIa2())
+                    && rowA.getCoordinateY() < rowB.getCoordinateY()
+                    ) {
                         listOfConnections.add(new Connection(rowA.getID(), rowB.getID(), "RIGHT"));
                     }//góra
                     else if (rowA.getCoordinateY() == rowA.getCoordinateY() && rowA.getCoordinateZ() == rowA.getCoordinateZ()
-                            && rowA.getIa1().equals(rowB.getIa1())) {
+                            && rowA.getIa1().equals(rowB.getIa1()) && rowA.getCoordinateX() < rowB.getCoordinateX()) {
                         listOfConnections.add(new Connection(rowA.getID(), rowB.getID(), "UP"));
                     }//skos
                     if (rowA.getCoordinateZ() == rowB.getCoordinateZ() && rowA.getIa1().equals(rowB.getIa2())

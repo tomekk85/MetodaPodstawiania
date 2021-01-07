@@ -4,9 +4,9 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        Subsitution s = new Subsitution(7);
+        Substitution s = new Substitution(4);
         s.calculateAllValues();
-        //generowanie listy dla zmodyfikowanej 2-giej gniazdy pętli
+        //generowanie listy dla zmodyfikowanego 2-giego gniazda pętli
         ArrayList<RowNestedArr> listMod2 = s.getListNestTwoModified();
         //wydruk
         System.out.println("Tabela 1. Zmodyfikowane 2-gie gniazdo pętli");
@@ -14,22 +14,37 @@ public class Main {
 
         System.out.println("");
 
-        //generowanie listy dla zmodyfikowanej 1-szej gniazdy pętli
+        //generowanie listy dla zmodyfikowanego 1-szego gniazda pętli
         ArrayList<RowNestedArr> listMod1 = s.getListNestOneModified();
         //wydruk
         System.out.println("Tabela 2. Zmodyfikowane 1-sze gniazdo pętli");
         printList(listMod1);
 
         //wydruk współrzędnych wierzchołków
+
         System.out.println("Liczba wierzchołków: " + listMod2.size());
         for(RowNestedArr row: listMod2){
             System.out.print("[" + row.getCoordinateX() + ", " + row.getCoordinateY() + ", " + row.getCoordinateZ() + "], ");
         }
-
-        //wydruk połączeń między wierzchołkami
         System.out.println();
+        //utworzenie listy połączeń między wierzchołkami
         ArrayList<Connection> connections = s.getListOfConnections();
+
         System.out.println("Liczba połączen: " + connections.size());
+        //wydruk połączeń między wierzchołkami współrzędne wierzchołków
+        /*System.out.println();
+
+        for (Connection con : connections) {
+            RowNestedArr firstRow = listMod2.get(con.getFirstVerticeID() - 1);
+            RowNestedArr secondRow =listMod2.get(con.getSecondVerticeID() - 1);
+            System.out.print("[" + Arrays.toString(firstRow.getCoordinates())
+                    + ", " + Arrays.toString(secondRow.getCoordinates()) + "], ");
+        }
+        System.out.println();
+        */
+
+        //wydruk połączeń między wierzchołkami - ID wierzchołków
+
         for (Connection con : connections) {
             System.out.print("[" + con.getFirstVerticeID()+", "+ con.getSecondVerticeID() + "], ");
         }
@@ -82,6 +97,7 @@ public class Main {
          */
     }
 
+    //metoda do drukowania macierzy 2-wym.
     public static void printMatrix(Object[][] matrix) {
         for (Object[] row : matrix) {
             for (Object cell : row) {
@@ -91,6 +107,7 @@ public class Main {
         }
     }
 
+    //metoda do drukowania listy typu ArrayList przechowujących obiekty RoNestedArr
     public static void printList(ArrayList<RowNestedArr> list) {
         for (Object item : list) {
             System.out.println(item);

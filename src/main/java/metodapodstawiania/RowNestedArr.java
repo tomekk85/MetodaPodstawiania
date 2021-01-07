@@ -36,6 +36,10 @@ public class RowNestedArr{
 
     public int getID() { return ID;}
 
+    public int[] getCoordinates(){
+        int[] arrOfCoordinates ={coordinateX, coordinateY, coordinateZ};
+        return arrOfCoordinates ;}
+
     public RowNestedArr(int ID, int coordinateX, int coordinateY, int coordinateZ,
                         PairOfCoordinates im, PairOfCoordinates ia2, PairOfCoordinates ia1) {
         this.ID = ID;

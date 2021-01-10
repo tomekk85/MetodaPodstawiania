@@ -4,33 +4,37 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        Substitution s = new Substitution(4);
+        int dim = 5;
+        Substitution s = new Substitution(dim);
         s.calculateAllValues();
         //generowanie listy dla zmodyfikowanego 2-giego gniazda pętli
-        ArrayList<RowNestedArr> listMod2 = s.getListNestTwoModified();
+        ArrayList<RowNestedArr> listMod2 = s.getListNestTwo();
         //wydruk
-        System.out.println("Tabela 1. Zmodyfikowane 2-gie gniazdo pętli");
+        System.out.println("Tabela 1. Zmodyfikowane 2-gie gniazdo pętli (mnożenie z odejmowaniem)" +
+                " dla macierzy " + dim +" x "+ dim);
         printList(listMod2);
 
         System.out.println("");
 
         //generowanie listy dla zmodyfikowanego 1-szego gniazda pętli
-        ArrayList<RowNestedArr> listMod1 = s.getListNestOneModified();
+        ArrayList<RowNestedArr> listMod1 = s.getListNestOne();
         //wydruk
-        System.out.println("Tabela 2. Zmodyfikowane 1-sze gniazdo pętli");
+        System.out.println("Tabela 2. Zmodyfikowane 1-sze gniazdo pętli(dzielenie)" +
+                " dla macierzy " + dim +" x "+ dim);
         printList(listMod1);
 
         //wydruk współrzędnych wierzchołków
 
-        System.out.println("Liczba wierzchołków: " + listMod2.size());
-        for(RowNestedArr row: listMod2){
-            System.out.print("[" + row.getCoordinateX() + ", " + row.getCoordinateY() + ", " + row.getCoordinateZ() + "], ");
+        ArrayList<RowNestedArr> totalList = s.getListOfBothNests();
+        System.out.println("Liczba wierzchołków: " + totalList.size());
+        for (RowNestedArr row : totalList) {
+            System.out.print("[" + row.getCoordinateX() + ", " + row.getCoordinateY() + "], ");
         }
         System.out.println();
         //utworzenie listy połączeń między wierzchołkami
         ArrayList<Connection> connections = s.getListOfConnections();
 
-        System.out.println("Liczba połączen: " + connections.size());
+        System.out.println("Liczba łuków: " + connections.size());
         //wydruk połączeń między wierzchołkami współrzędne wierzchołków
         /*System.out.println();
 
@@ -46,7 +50,7 @@ public class Main {
         //wydruk połączeń między wierzchołkami - ID wierzchołków
 
         for (Connection con : connections) {
-            System.out.print("[" + con.getFirstVerticeID()+", "+ con.getSecondVerticeID() + "], ");
+            System.out.print("[" + con.getFirstVerticeID() + ", " + con.getSecondVerticeID() + "], ");
         }
         /*
        //weryfikacja algorytmu

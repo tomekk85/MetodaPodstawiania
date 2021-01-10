@@ -9,8 +9,9 @@ public class Substitution {
     private double[] vectorX;// wektor niewiadomych
     private long start;//przechowuje czas rozpoczęcia pomiaru czasu
     private long stop;//przechowuje czas zkończenia pomiaru czasu
-    private ArrayList<RowNestedArr> listNestTwoModified;// lista danych do tabeli - zmodyfikowano 2-gie gn. pętli
-    private ArrayList<RowNestedArr> listNestOneModified;// lista danych do tabeli - zmodyfikowano 1-sze gn. pętli
+    private ArrayList<RowNestedArr> listNestTwo;// lista danych do tabeli - zmodyfikowano 2-gie gn. pętli
+    private ArrayList<RowNestedArr> listNestOne;// lista danych do tabeli - zmodyfikowano 1-sze gn. pętli
+    private ArrayList<RowNestedArr> listOfBothNests;// lista danych do tabeli zbiorczej 1-sze i 2-gie gn. pętli
     private ArrayList<Connection> listOfConnections;//lista połączeń między wierzchołkami
 
     //konstruktor wykorzystywany przy weryfikacji algorytmu
@@ -62,6 +63,10 @@ public class Substitution {
         return Double.valueOf(getTimeInNano()) / 1000.0;
     }
 
+    public ArrayList<RowNestedArr> getListOfBothNests() {
+        return listOfBothNests;
+    }
+
     public int getDimension() {
         return dimension;
     }
@@ -90,17 +95,18 @@ public class Substitution {
         return vectorX;
     }
 
-    public ArrayList<RowNestedArr> getListNestTwoModified() {
-        return listNestTwoModified;
+    public ArrayList<RowNestedArr> getListNestTwo() {
+        return listNestTwo;
     }
 
-    public ArrayList<RowNestedArr> getListNestOneModified() {
-        return listNestOneModified;
+    public ArrayList<RowNestedArr> getListNestOne() {
+        return listNestOne;
     }
 
     public ArrayList<Connection> getListOfConnections() {
         return listOfConnections;
     }
+
 
     //petle obliczeniowe - implementacja algorytmu
     public double[] calculate() {
@@ -129,11 +135,11 @@ public class Substitution {
      */
     public void calculateWithSecondNestModified() {
 
-        listNestTwoModified = new ArrayList<>();// lista przechowuje elementy zliczane z 1 i 2 gniazda pętli
+        listNestTwo = new ArrayList<>();// lista przechowuje elementy zliczane z 1 i 2 gniazda pętli
 
         vectorX = new double[dimension];
 
-        //pierwsze gniazdo
+        //drugie gniazdo
         int iterator = 1;//zlicza ile razy była wykonana(w ogóle) operacja z wewnętrznej pętli
 
         for (int i = 0; i < dimension; i++) {
@@ -141,20 +147,19 @@ public class Substitution {
             for (int j = i + 1; j < dimension; j++) {
                 vectorB[j] = vectorB[j] - matrixA[j][i] * vectorX[i];
 
-                for (int k = i + 1; k < dimension; k++) {
-                    int vertA = i + 1;
-                    int vertB = j + 1;
-                    int vertC = k + 1;
 
-                    listNestTwoModified.add(
-                            new RowNestedArr(iterator, vertA, vertB, vertC,
-                                    new PairOfCoordinates(vertB, vertA),
-                                    new PairOfCoordinates(vertA, vertC),
-                                    new PairOfCoordinates(vertB, vertC)
-                            )
-                    );
-                    iterator++;
-                }
+                int vertA = i + 1;
+                int vertB = j + 1;
+
+
+                listNestTwo.add(
+                        new RowNestedArr(iterator, vertA, vertB,
+                                new PairOfCoordinates(vertA, vertB),
+                                new PairOfCoordinates(vertB, vertA)
+                        )
+                );
+                iterator++;
+
             }
         }
     }
@@ -170,35 +175,31 @@ public class Substitution {
             numberOfElements += i * i;
         }
 
-        listNestOneModified = new ArrayList<>();// lista przechowuje elementy zliczane z 1 i 2 gniazda pętli
+        listNestOne = new ArrayList<>();//
 
         vectorX = new double[dimension];
 
         //pierwsze gniazdo
-        int iterator = 1;//zlicza ile razy była wykonana(w ogóle) operacja z wewnętrznej pętli
+        int iterator = listNestTwo.size() + 1;//zlicza ile razy była wykonana(w ogóle) operacja z wewnętrznej pętli
 
         for (int i = 0; i < dimension; i++) {
             vectorX[i] = vectorB[i] / matrixA[i][i];
+            int vertA = i + 1;
+            int vertB = i + 1;
+
+            listNestOne.add(
+                    new RowNestedArr(
+                            iterator,
+                            vertA, vertB,
+                            new PairOfCoordinates(vertA, vertB),
+                            new PairOfCoordinates(vertB, vertA)
+                    )
+            );
+            iterator++;
 
             for (int j = i + 1; j < dimension; j++) {
                 vectorB[j] = vectorB[j] - matrixA[j][i] * vectorX[i];
 
-                for (int k = i; k <= i; k++) {
-                    int vertA = i + 1;
-                    int vertB = j + 1;
-                    int vertC = k + 1;
-
-                    listNestOneModified.add(
-                            new RowNestedArr(
-                                    iterator,
-                                    vertA, vertB, vertC,
-                                    new PairOfCoordinates(vertB, vertA),
-                                    new PairOfCoordinates(vertA, vertC),
-                                    new PairOfCoordinates(vertB, vertC)
-                            )
-                    );
-                    iterator++;
-                }
             }
         }
     }
@@ -215,32 +216,27 @@ public class Substitution {
      * oraz informację o kierunku(lewo, prawo, góra, skos)
      */
     public void calculateListOfConnections() {
+        listOfBothNests = new ArrayList<>(listNestTwo);
+
+        for(RowNestedArr row: listNestOne){
+            listOfBothNests.add(row);
+        }
+
         listOfConnections = new ArrayList<Connection>();
 
-        for (int i = 0; i < listNestTwoModified.size(); i++) {
-            for (int j = 1; j < listNestTwoModified.size(); j++) {
+
+        for (int i = 0; i < listOfBothNests.size(); i++) {
+            for (int j = 0; j < listOfBothNests.size(); j++) {
                 if (i != j) {
-                    RowNestedArr rowA = listNestTwoModified.get(i);
-                    RowNestedArr rowB = listNestTwoModified.get(j);
-                    //lewo
-                    if (rowA.getCoordinateX() == rowA.getCoordinateX() && rowA.getIm().equals(rowB.getIm())
-                    && rowA.getCoordinateZ() < rowB.getCoordinateZ()) {
-                        listOfConnections.add(new Connection(rowA.getID(), rowB.getID(), "LEFT"));
-                    }//prawo
-                    else if (rowA.getCoordinateX() == rowA.getCoordinateX() && rowA.getIa2().equals(rowB.getIa2())
-                    && rowA.getCoordinateY() < rowB.getCoordinateY()
+                    RowNestedArr rowA = listOfBothNests.get(i);
+                    RowNestedArr rowB = listOfBothNests.get(j);
+                    //prawo
+                    if ((rowA.getCoordinateX() == rowB.getCoordinateX() - 1) && rowA.getCoordinateY() == rowB.getCoordinateY()
                     ) {
                         listOfConnections.add(new Connection(rowA.getID(), rowB.getID(), "RIGHT"));
                     }//góra
-                    else if (rowA.getCoordinateY() == rowA.getCoordinateY() && rowA.getCoordinateZ() == rowA.getCoordinateZ()
-                            && rowA.getIa1().equals(rowB.getIa1()) && rowA.getCoordinateX() < rowB.getCoordinateX()) {
+                    else if ((rowA.getCoordinateY() == rowB.getCoordinateY() - 1) && rowA.getCoordinateX() == rowB.getCoordinateX()) {
                         listOfConnections.add(new Connection(rowA.getID(), rowB.getID(), "UP"));
-                    }//skos
-                    if (rowA.getCoordinateZ() == rowB.getCoordinateZ() && rowA.getIa1().equals(rowB.getIa2())
-                            && Math.abs(rowA.getCoordinateX() - rowB.getCoordinateX()) == 1
-                            && Math.abs(rowA.getCoordinateY() - rowB.getCoordinateY()) == 1
-                    ) {
-                        listOfConnections.add(new Connection(rowA.getID(), rowB.getID(), "CROSS"));
                     }
                 }
             }
